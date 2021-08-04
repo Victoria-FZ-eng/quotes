@@ -9,6 +9,28 @@ public class Quotes {
     String likes;
     String text;
 
+    public String getQuoteText() {
+        return quoteText;
+    }
+
+    public String getQuoteAuthor() {
+        return quoteAuthor;
+    }
+
+    String quoteText;
+    String quoteAuthor;
+
+    public Quotes(String quoteText, String quoteAuthor) {
+        this.quoteText = quoteText;
+        this.quoteAuthor = quoteAuthor;
+    }
+    public String toString2(){
+        return "Quotes{" +
+                ", author='" + quoteAuthor + '\'' +
+
+                ", text='" + quoteText + '\'' +
+                '}';
+    }
     public Quotes(ArrayList<String> tags, String author, String likes, String text) {
         this.tags = tags;
         this.author = author;
@@ -57,4 +79,6 @@ public class Quotes {
                 ", text='" + text + '\'' +
                 '}';
     }
+
+
 }

@@ -23,6 +23,8 @@ public class App {
         return "Hello from lab08 & lab09";
     }
 
+    public static ArrayList<String> quotes= new ArrayList<String>();
+
     public static void main(String[] args) {
         System.out.println(new App().getGreeting());
 
@@ -103,29 +105,31 @@ public class App {
 
 
             int status = connect.getResponseCode();
-
-
            // System.out.println(status);
             if(status == 200){
-                InputStream inputStream = connect.getInputStream();
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                String line = bufferedReader.readLine();
+                InputStream inputStr = connect.getInputStream();
+                InputStreamReader inputStrReader = new InputStreamReader(inputStr);
+                BufferedReader bufferedReader = new BufferedReader(inputStrReader);
 
+                Gson gson = new Gson();
 
+                Quotes q = gson.fromJson(bufferedReader,Quotes.class);
+                quotes.add(q.toString2());
+                System.out.println(q.toString2());
 
-                System.out.println(line);
+              //  String line = bufferedReader.readLine();
 
+              //  System.out.println(connect.getHeaderField("quoteText"));
 
-                while(line != null){
-                    // building a string   s = s+buffreedReader.readLine();   StringBuilder
-                    System.out.println(line);
-                    line = bufferedReader.readLine();
+//                System.out.println(line);
+//                while(line != null){
+//                    // building a string   s = s+buffreedReader.readLine();   StringBuilder
+//                    System.out.println(line);
+//                    line = bufferedReader.readLine();
                  //   System.out.println(line);
+             //   }
 
-
-                }
-                bufferedReader.close();
+            bufferedReader.close();
             } else{
                 System.out.println("An error occurred with status "+status);
             }

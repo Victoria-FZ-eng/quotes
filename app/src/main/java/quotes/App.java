@@ -5,25 +5,38 @@ package quotes;
 
 import com.google.gson.*;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class App {
     public String getGreeting() {
-        return "Hello from lab08";
+        return "Hello from lab08 & lab09";
     }
 
     public static void main(String[] args) {
         System.out.println(new App().getGreeting());
 
+//--------------------------lab 08---------------------
+   //     ArrayList<String> quotes = convertingJsonFile("recentquotes.json");
+     //   randomQuote(quotes);
 
-        ArrayList<String> quotes = convertingJsonFile("recentquotes.json");
-        randomQuote(quotes);
+
+  //------------------------------lab 09---------------------------------
+
+        httpRequestQuote();
+
     }
-
+    //--------------------------lab 08---------------------
     public static ArrayList<String> convertingJsonFile(String path){
         File file = new File(path);
         ArrayList<String> quotes= new ArrayList<String>();
@@ -68,7 +81,69 @@ public class App {
 
     public static String randomQuote(ArrayList<String> q){
         int idx = (int) (Math.random()*q.size());
-        System.out.println(q.get(0));
+        System.out.println("Json File "+q.get(idx));
         return q.get(idx);
+    }
+
+    //------------------------------lab 09---------------------------------
+
+    public static String httpRequestQuote(){
+        String api = "http://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en";
+
+        try {
+            URL url = new URL(api);
+            HttpURLConnection connect = (HttpURLConnection) url.openConnection();
+            connect.setRequestMethod("GET");
+            connect.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11");
+
+//            HttpClient client = HttpClient.newHttpClient();
+//            HttpRequest request = HttpRequest.newBuilder().uri(URI.create(api)).build();
+//           client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).thenApply(HttpResponse::body).thenAccept(System.out::println).join();
+//
+
+
+            int status = connect.getResponseCode();
+
+
+           // System.out.println(status);
+            if(status == 200){
+                InputStream inputStream = connect.getInputStream();
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String line = bufferedReader.readLine();
+
+
+
+                System.out.println(line);
+
+
+                while(line != null){
+                    // building a string   s = s+buffreedReader.readLine();   StringBuilder
+                    System.out.println(line);
+                    line = bufferedReader.readLine();
+                 //   System.out.println(line);
+
+
+                }
+                bufferedReader.close();
+            } else{
+                System.out.println("An error occurred with status "+status);
+            }
+
+            connect.disconnect();
+        } catch (MalformedURLException e) {
+
+            ArrayList<String> quotes = convertingJsonFile("recentquotes.json");
+            randomQuote(quotes);
+            e.printStackTrace();
+        } catch (IOException e){
+
+            ArrayList<String> quotes = convertingJsonFile("recentquotes.json");
+            randomQuote(quotes);
+            e.printStackTrace();
+        }
+
+
+        return "hi";
     }
 }

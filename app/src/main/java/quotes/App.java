@@ -8,6 +8,7 @@ import com.google.gson.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class App {
@@ -18,13 +19,19 @@ public class App {
     public static void main(String[] args) {
         System.out.println(new App().getGreeting());
 
-        File file = new File("recentquotes.json");
+
+        ArrayList<String> quotes = convertingJsonFile("recentquotes.json");
+        randomQuote(quotes);
+    }
+
+    public static ArrayList<String> convertingJsonFile(String path){
+        File file = new File(path);
         ArrayList<String> quotes= new ArrayList<String>();
         try {
             JsonElement fileQuote = JsonParser.parseReader(new FileReader(file));
-        // get Json array
+            // get Json array
             JsonArray quotesArray = fileQuote.getAsJsonArray();
-        //    System.out.println(quotesArray);
+            //    System.out.println(quotesArray);
 
 
             // convert Json array
@@ -33,34 +40,35 @@ public class App {
                 JsonObject quoteObj = jsonElement.getAsJsonObject();
 
                 JsonArray tagsArr = quoteObj.getAsJsonArray("tags");
-               // System.out.println(tagsArr);
+                // System.out.println(tagsArr);
                 ArrayList<String> tags = new ArrayList<String>();
                 for (JsonElement element : tagsArr) {
-                  tags.add(element.getAsString()) ;
+                    tags.add(element.getAsString()) ;
                 }
-               // System.out.println(tags);
+                // System.out.println(tags);
 
                 String author = quoteObj.get("author").getAsString();
                 String likes = quoteObj.get("likes").getAsString();
                 String text = quoteObj.get("text").getAsString();
 
-              //  System.out.println(author);
+                //  System.out.println(author);
                 Quotes quote = new Quotes(tags,author,likes,text);
                 quotes.add(quote.toString());
             }
-          //  System.out.println("Array list-Json converted : "+quotes);
+            //  System.out.println("Array list-Json converted : "+quotes);
 
         }
         catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
-        randomQuote(quotes);
+      //  System.out.println(quotes);
+        return quotes;
     }
 
     public static String randomQuote(ArrayList<String> q){
-
-        System.out.println(q.get((int)Math.random()*q.size()));
-        return q.get((int)Math.random()*q.size());
+        int idx = (int) (Math.random()*q.size());
+        System.out.println(q.get(0));
+        return q.get(idx);
     }
 }

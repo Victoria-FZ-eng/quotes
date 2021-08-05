@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class AppTest {
     @Test void appHasAGreeting() {
@@ -25,6 +26,24 @@ class AppTest {
         tag.add("attributed-no-source");
         Quotes q = new Quotes(tag,"Marilyn Monroe","18651 likes"," “I am good, but not an angel. I do sin, but I am not the devil. I am just a small girl in a big world trying to find someone to love.” ");
         assertEquals( q.toString(),String.valueOf(App.convertingJsonFile(p).get(0)));
+
+    }
+
+    @Test void testHttpRequestConvertCatch(){
+        // test code with working api
+        String s ="http://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en";
+
+        assertNotNull(App.httpRequestQuote(s));
+
+        // test code with crashed api
+        String crashed="ksjdhfksjdf";
+        boolean thrown= false;
+        try{
+            App.httpRequestQuote(crashed);
+        }catch(Exception e){
+            thrown=true;
+        }
+        assertTrue(thrown);
 
     }
 }

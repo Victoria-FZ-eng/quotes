@@ -11,3 +11,11 @@ Approach
 5. Test the method.
 
 Just click the run method to see the outputs
+
+# lab09
+
+Approach
+1. Getting quote from http request
+2. Add data from request to json file and show quote
+3. If an error occurred then show quote from json file
+4. Test method on both working and crashed api.

@@ -29,13 +29,13 @@ public class App {
         System.out.println(new App().getGreeting());
 
 //--------------------------lab 08---------------------
-   //     ArrayList<String> quotes = convertingJsonFile("recentquotes.json");
-     //   randomQuote(quotes);
+        ArrayList<String> quotes = convertingJsonFile("recentquotes.json");
+        randomQuote(quotes);
 
 
   //------------------------------lab 09---------------------------------
 
-        httpRequestQuote();
+        httpRequestQuote("http://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en");
 
     }
     //--------------------------lab 08---------------------
@@ -47,8 +47,6 @@ public class App {
             // get Json array
             JsonArray quotesArray = fileQuote.getAsJsonArray();
             //    System.out.println(quotesArray);
-
-
             // convert Json array
             for (JsonElement jsonElement : quotesArray) {
 
@@ -89,8 +87,9 @@ public class App {
 
     //------------------------------lab 09---------------------------------
 
-    public static String httpRequestQuote(){
-        String api = "http://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en";
+    public static String httpRequestQuote(String s){
+        String api = s;
+        String qr =null;
 
         try {
             URL url = new URL(api);
@@ -116,6 +115,7 @@ public class App {
                 Quotes q = gson.fromJson(bufferedReader,Quotes.class);
                 quotes.add(q.toString2());
                 System.out.println(q.toString2());
+                qr=q.toString2();
 
               //  String line = bufferedReader.readLine();
 
@@ -135,19 +135,16 @@ public class App {
             }
 
             connect.disconnect();
-        } catch (MalformedURLException e) {
+        }
+        catch (Exception e){
 
             ArrayList<String> quotes = convertingJsonFile("recentquotes.json");
             randomQuote(quotes);
-            e.printStackTrace();
-        } catch (IOException e){
-
-            ArrayList<String> quotes = convertingJsonFile("recentquotes.json");
-            randomQuote(quotes);
-            e.printStackTrace();
+//            e.printStackTrace();
+            System.out.println("Error: "+ e);
         }
 
 
-        return "hi";
+        return qr;
     }
 }

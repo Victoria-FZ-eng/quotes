@@ -135,16 +135,13 @@ public class App {
             }
 
             connect.disconnect();
-        } catch (MalformedURLException e) {
+        }
+        catch (Exception e){
 
             ArrayList<String> quotes = convertingJsonFile("recentquotes.json");
             randomQuote(quotes);
-            e.printStackTrace();
-        } catch (IOException e){
-
-            ArrayList<String> quotes = convertingJsonFile("recentquotes.json");
-            randomQuote(quotes);
-            e.printStackTrace();
+//            e.printStackTrace();
+            System.out.println("Error: "+ e);
         }
 
 
